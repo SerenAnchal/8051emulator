@@ -1,0 +1,5 @@
+"-specs=C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/build/bootloader/specs/picolibc.specs"
+-mlongcalls
+-fno-builtin-memcpy
+-fno-builtin-memset
+-fno-builtin-bzero
