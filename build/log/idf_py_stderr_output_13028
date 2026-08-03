@@ -1,0 +1,100 @@
+Command: C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe C:\esp\v6.0.2\esp-idf\tools/idf_monitor.py -p COM10 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build\8051sier.elf C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build\bootloader\bootloader.elf --force-color -m 'C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe' 'C:\esp\v6.0.2\esp-idf\tools\idf.py'
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM10 instead...[0m
+[0;33m--- esp-idf-monitor 1.9.0 on \\.\COM10 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x403c8700: [0;33m_stext[0m[0m at [0;32m??[0m[0m:[1;31m?[0m
+[0m--- 0x403c8908: [0;33mcall_start_cpu0[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/bootloader/subproject/main/bootloader_start.c[0m[0m:[1;31m27[0m
+[0m--- 0x4200c736: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x4200cb48: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x40377319: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x42007006: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_hal_uart/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m434[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m190[0m
+[0m--- 0x42007781: [0;33muart_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m245[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x42001580: [0;33mconsole_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_stdio/stdio_vfs.c[0m[0m:[1;31m84[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x4200f87d: [0;33mbufio_write[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/stdio_private.h[0m[0m:[1;31m183[0m
+[0m--- (inlined by) [0;33m__bufio_flush_locked[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m62[0m
+[0m--- 0x4200db0a: [0;33m__bufio_put[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m187[0m
+[0m--- 0x4200df4d: [0;33mvfprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vfprintf.c[0m[0m:[1;31m581[0m
+[0m--- 0x4200e9eb: [0;33mvprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vprintf.c[0m[0m:[1;31m38[0m
+[0m--- 0x4037ec27: [0;33mesp_log_va[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m43[0m
+[0m--- (inlined by) [0;33mesp_log[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m88[0m
+[0m--- 0x4200ce46: [0;33mprint_buffer[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m104[0m
+[0m--- 0x4200ce69: [0;33mesp_log_buffer_hexdump_internal[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m82[0m
+[0m--- 0x42008d23: [0;33mapp_main[0m[0m at [0;32mC:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/main.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006543: [0;33mmain_task[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m206[0m
+[0m--- 0x42010e5e: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x4200c736: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x4200cb48: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x40377319: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x42007006: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_hal_uart/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m434[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m190[0m
+[0m--- 0x42007781: [0;33muart_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m245[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x42001580: [0;33mconsole_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_stdio/stdio_vfs.c[0m[0m:[1;31m84[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x4200f87d: [0;33mbufio_write[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/stdio_private.h[0m[0m:[1;31m183[0m
+[0m--- (inlined by) [0;33m__bufio_flush_locked[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m62[0m
+[0m--- 0x4200db0a: [0;33m__bufio_put[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m187[0m
+[0m--- 0x4200df4d: [0;33mvfprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vfprintf.c[0m[0m:[1;31m581[0m
+[0m--- 0x4200e9eb: [0;33mvprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vprintf.c[0m[0m:[1;31m38[0m
+[0m--- 0x4037ec27: [0;33mesp_log_va[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m43[0m
+[0m--- (inlined by) [0;33mesp_log[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m88[0m
+[0m--- 0x4200ce46: [0;33mprint_buffer[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m104[0m
+[0m--- 0x4200ce69: [0;33mesp_log_buffer_hexdump_internal[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m82[0m
+[0m--- 0x42008d23: [0;33mapp_main[0m[0m at [0;32mC:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/main.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006543: [0;33mmain_task[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m206[0m
+[0m--- 0x42010e5e: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x4200c736: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x4200cb48: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x40377319: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x4200700c: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_hal_uart/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m434[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m190[0m
+[0m--- 0x42007781: [0;33muart_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m245[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x42001580: [0;33mconsole_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_stdio/stdio_vfs.c[0m[0m:[1;31m84[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x4200f87d: [0;33mbufio_write[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/stdio_private.h[0m[0m:[1;31m183[0m
+[0m--- (inlined by) [0;33m__bufio_flush_locked[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m62[0m
+[0m--- 0x4200db0a: [0;33m__bufio_put[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m187[0m
+[0m--- 0x4200df4d: [0;33mvfprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vfprintf.c[0m[0m:[1;31m581[0m
+[0m--- 0x4200e9eb: [0;33mvprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vprintf.c[0m[0m:[1;31m38[0m
+[0m--- 0x4037ec27: [0;33mesp_log_va[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m43[0m
+[0m--- (inlined by) [0;33mesp_log[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m88[0m
+[0m--- 0x4200ce46: [0;33mprint_buffer[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m104[0m
+[0m--- 0x4200ce69: [0;33mesp_log_buffer_hexdump_internal[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m82[0m
+[0m--- 0x42008d23: [0;33mapp_main[0m[0m at [0;32mC:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/main.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006543: [0;33mmain_task[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m206[0m
+[0m--- 0x42010e5e: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m--- 0x4200c736: [0;33mtask_wdt_timeout_handling[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m436[0m
+[0m--- 0x4200cb48: [0;33mtask_wdt_isr[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_system/task_wdt/task_wdt.c[0m[0m:[1;31m509[0m
+[0m--- 0x40377319: [0;33m_xt_lowint1[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/xtensa/xtensa_vectors.S[0m[0m:[1;31m1264[0m
+[0m--- 0x42007006: [0;33muart_ll_get_txfifo_len[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_hal_uart/esp32s3/include/hal/uart_ll.h[0m[0m:[1;31m434[0m
+[0m--- (inlined by) [0;33muart_tx_char[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m190[0m
+[0m--- 0x42007781: [0;33muart_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_driver_uart/src/uart_vfs.c[0m[0m:[1;31m245[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x42001580: [0;33mconsole_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_stdio/stdio_vfs.c[0m[0m:[1;31m84[0m
+[0m--- 0x42008549: [0;33mesp_vfs_write[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/vfs/vfs_calls.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006a9e: [0;33mwrite[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/esp_libc/src/syscalls.c[0m[0m:[1;31m51[0m
+[0m--- 0x4200f87d: [0;33mbufio_write[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/stdio_private.h[0m[0m:[1;31m183[0m
+[0m--- (inlined by) [0;33m__bufio_flush_locked[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m62[0m
+[0m--- 0x4200db0a: [0;33m__bufio_put[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/bufio.c[0m[0m:[1;31m187[0m
+[0m--- 0x4200df4d: [0;33mvfprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vfprintf.c[0m[0m:[1;31m581[0m
+[0m--- 0x4200e9eb: [0;33mvprintf[0m[0m at [0;32m/builds/idf/crosstool-NG/.build/xtensa-esp-elf/build/build-picolibc-build-x86_64-build_pc-linux-gnu/../../../src/picolibc-git-1738c754/newlib/libc/tinystdio/vprintf.c[0m[0m:[1;31m38[0m
+[0m--- 0x4037ec27: [0;33mesp_log_va[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m43[0m
+[0m--- (inlined by) [0;33mesp_log[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/log.c[0m[0m:[1;31m88[0m
+[0m--- 0x4200ce46: [0;33mprint_buffer[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m104[0m
+[0m--- 0x4200ce69: [0;33mesp_log_buffer_hexdump_internal[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/log/src/buffer/log_buffers.c[0m[0m:[1;31m82[0m
+[0m--- 0x42008d23: [0;33mapp_main[0m[0m at [0;32mC:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/main.c[0m[0m:[1;31m77[0m
+[0m--- 0x42006543: [0;33mmain_task[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/app_startup.c[0m[0m:[1;31m206[0m
+[0m--- 0x42010e5e: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/esp/v6.0.2/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m147[0m
+[0m

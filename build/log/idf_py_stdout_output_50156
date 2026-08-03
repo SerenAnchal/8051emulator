@@ -1,0 +1,131 @@
+Command: C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe C:\esp\v6.0.2\esp-idf\tools/idf_monitor.py -p COM5 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build\8051sier.elf C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build\bootloader\bootloader.elf --force-color -m 'C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe' 'C:\esp\v6.0.2\esp-idf\tools\idf.py'
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x2b (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40048dfc
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x14f0
+load:0x403c8700,len:0xda0
+load:0x403cb700,len:0x2f54
+entry 0x403c8908
+[0;32mI (24) boot: ESP-IDF v6.0.2 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Aug  2 2026 11:09:28[0m
+[0;32mI (25) boot: Multicore bootloader[0m
+[0;32mI (25) boot: chip revision: v0.2[0m
+[0;32mI (28) boot: efuse block revision: v1.3[0m
+[0;32mI (31) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (35) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32s3: SPI Flash Size : 2MB[0m
+[0;32mI (43) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (50) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (62) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (76) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3c020020 size=0abd0h ( 43984) map[0m
+[0;32mI (94) esp_image: segment 1: paddr=0001abf8 vaddr=3fc91300 size=030c0h ( 12480) load[0m
+[0;32mI (97) esp_image: segment 2: paddr=0001dcc0 vaddr=40374000 size=02358h (  9048) load[0m
+[0;32mI (103) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=14a84h ( 84612) map[0m
+[0;32mI (124) esp_image: segment 4: paddr=00034aac vaddr=40376358 size=0af20h ( 44832) load[0m
+[0;32mI (135) esp_image: segment 5: paddr=0003f9d4 vaddr=50000000 size=00024h (    36) load[0m
+[0;32mI (141) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (141) boot: Disabling RNG early entropy source...[0m
+[0;32mI (153) cpu_start: Multicore app[0m
+[0;32mI (161) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (162) cpu_start: Pro cpu start user code[0m
+[0;32mI (162) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (163) app_init: Application information:[0m
+[0;32mI (167) app_init: Project name:     8051sier[0m
+[0;32mI (171) app_init: App version:      4781247-dirty[0m
+[0;32mI (176) app_init: Compile time:     Aug  2 2026 11:09:02[0m
+[0;32mI (181) app_init: ELF file SHA256:  4cf312097...[0m
+[0;32mI (185) app_init: ESP-IDF:          v6.0.2[0m
+[0;32mI (189) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (193) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (197) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (200) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (207) heap_init: At 3FC9D980 len 0004BD90 (303 KiB): RAM[0m
+[0;32mI (212) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (217) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (222) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (228) spi_flash: detected chip: boya[0m
+[0;32mI (231) spi_flash: flash io: dio[0m
+[0;33mW (234) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;33mW (246) i2c: This driver is an old driver, please migrate your application code to adapt `driver/i2c_master.h`[0m
+[0;32mI (256) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (262) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (269) main_task: Started on CPU0[0m
+[0;32mI (269) main_task: Calling app_main()[0m
+[0;32mI (279) THE SIMIER_DEMO:  INIT I2C...[0m
+[0;32mI (279) THE SIMIER_DEMO: BEGAN MOVE DATA FROM 24C256 TO RAM[0m
+[0;32mI (1029) THE SIMIER_DEMO: MOVE 8051 VIRTUAL RAM -ok[0m
+[0;32mI (1029) RAM_HEAD_KERNAL_DATA: 0x3fc94c34   00 03 00 04 03 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1039) RAM_HEAD_KERNAL_DATA: 0x3fc94c44   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1049) RAM_HEAD_KERNAL_DATA: 0x3fc94c54   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1059) RAM_HEAD_KERNAL_DATA: 0x3fc94c64   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1069) RAM_HEAD_KERNAL_DATA: 0x3fc94c74   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1079) RAM_HEAD_KERNAL_DATA: 0x3fc94c84   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1089) RAM_HEAD_KERNAL_DATA: 0x3fc94c94   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1099) RAM_HEAD_KERNAL_DATA: 0x3fc94ca4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1109) RAM_HEAD_KERNAL_DATA: 0x3fc94cb4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1119) RAM_HEAD_KERNAL_DATA: 0x3fc94cc4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1129) RAM_HEAD_KERNAL_DATA: 0x3fc94cd4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1139) RAM_HEAD_KERNAL_DATA: 0x3fc94ce4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1149) RAM_HEAD_KERNAL_DATA: 0x3fc94cf4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1159) RAM_HEAD_KERNAL_DATA: 0x3fc94d04   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1169) RAM_HEAD_KERNAL_DATA: 0x3fc94d14   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1179) RAM_HEAD_KERNAL_DATA: 0x3fc94d24   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1189) RAM_HEAD_KERNAL_DATA: 0x3fc94d34   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1199) RAM_HEAD_KERNAL_DATA: 0x3fc94d44   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1209) RAM_HEAD_KERNAL_DATA: 0x3fc94d54   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1209) RAM_HEAD_KERNAL_DATA: 0x3fc94d64   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1219) RAM_HEAD_KERNAL_DATA: 0x3fc94d74   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1229) RAM_HEAD_KERNAL_DATA: 0x3fc94d84   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1239) RAM_HEAD_KERNAL_DATA: 0x3fc94d94   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1249) RAM_HEAD_KERNAL_DATA: 0x3fc94da4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1259) RAM_HEAD_KERNAL_DATA: 0x3fc94db4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1269) RAM_HEAD_KERNAL_DATA: 0x3fc94dc4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1279) RAM_HEAD_KERNAL_DATA: 0x3fc94dd4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1289) RAM_HEAD_KERNAL_DATA: 0x3fc94de4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1299) RAM_HEAD_KERNAL_DATA: 0x3fc94df4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1309) RAM_HEAD_KERNAL_DATA: 0x3fc94e04   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1319) RAM_HEAD_KERNAL_DATA: 0x3fc94e14   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1329) RAM_HEAD_KERNAL_DATA: 0x3fc94e24   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1339) RAM_HEAD_KERNAL_DATA: 0x3fc94e34   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1349) RAM_HEAD_KERNAL_DATA: 0x3fc94e44   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1359) RAM_HEAD_KERNAL_DATA: 0x3fc94e54   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1369) RAM_HEAD_KERNAL_DATA: 0x3fc94e64   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1379) RAM_HEAD_KERNAL_DATA: 0x3fc94e74   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1389) RAM_HEAD_KERNAL_DATA: 0x3fc94e84   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1399) RAM_HEAD_KERNAL_DATA: 0x3fc94e94   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1409) RAM_HEAD_KERNAL_DATA: 0x3fc94ea4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1419) RAM_HEAD_KERNAL_DATA: 0x3fc94eb4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1429) RAM_HEAD_KERNAL_DATA: 0x3fc94ec4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1439) RAM_HEAD_KERNAL_DATA: 0x3fc94ed4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1449) RAM_HEAD_KERNAL_DATA: 0x3fc94ee4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1459) RAM_HEAD_KERNAL_DATA: 0x3fc94ef4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1469) RAM_HEAD_KERNAL_DATA: 0x3fc94f04   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1479) RAM_HEAD_KERNAL_DATA: 0x3fc94f14   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1489) RAM_HEAD_KERNAL_DATA: 0x3fc94f24   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1499) RAM_HEAD_KERNAL_DATA: 0x3fc94f34   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1509) RAM_HEAD_KERNAL_DATA: 0x3fc94f44   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1519) RAM_HEAD_KERNAL_DATA: 0x3fc94f54   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1529) RAM_HEAD_KERNAL_DATA: 0x3fc94f64   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1539) RAM_HEAD_KERNAL_DATA: 0x3fc94f74   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1549) RAM_HEAD_KERNAL_DATA: 0x3fc94f84   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1559) RAM_HEAD_KERNAL_DATA: 0x3fc94f94   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1569) RAM_HEAD_KERNAL_DATA: 0x3fc94fa4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1579) RAM_HEAD_KERNAL_DATA: 0x3fc94fb4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1589) RAM_HEAD_KERNAL_DATA: 0x3fc94fc4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1599) RAM_HEAD_KERNAL_DATA: 0x3fc94fd4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1609) RAM_HEAD_KERNAL_DATA: 0x3fc94fe4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1619) RAM_HEAD_KERNAL_DATA: 0x3fc94ff4   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1629) RAM_HEAD_KERNAL_DATA: 0x3fc95004   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1639) RAM_HEAD_KERNAL_DATA: 0x3fc95014   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1649) RAM_HEAD_KERNAL_DATA: 0x3fc95024   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|[0m
+[0;32mI (1659) SIMIER: 8051 ENGINE BOOT & RUN ->[0m
+[0;32mI (1669) SIMIER: RR_A[0m
+[0;32mI (1689) SIMIER: RR_A[0m
+[0;32mI (1699) SIMIER: RR_A[0m

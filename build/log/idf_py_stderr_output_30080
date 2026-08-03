@@ -1,4 +1,4 @@
-Command: ninja all
+Command: cmake -G Ninja -B C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe -DESP_PLATFORM=1 -DIDF_TARGET=esp32s3 -DCCACHE_ENABLE=False C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier
 Configuration Report                                                           
 +-----------------------------------------------------------------------------+
 |  Parser Version: 1                                                          |

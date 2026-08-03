@@ -8,5 +8,8 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=c:\\Users\\31736\\Desktop\\PROJECT\\espidf_8051sier\\8051sier\\build"
+  ],
+  "idf.openOcdConfigs": [
+    "board/esp32c3-ftdi.cfg"
   ]
 }
