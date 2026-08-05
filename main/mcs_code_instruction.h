@@ -11,6 +11,12 @@ typedef struct {
     unsigned char PSW_R;
     unsigned short PC_R;
     unsigned char SP_R;
+
+    //interrup
+    unsigned char IE_R;//终端允许寄存器
+    unsigned char IP_R;//中断优先级寄存器
+    unsigned char TCON_R;//定时器控制寄存器
+    uint8_t INT_LATCH; ;
 } MCS_8051;
 
 typedef struct mcs_instruction_struct{

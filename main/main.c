@@ -363,8 +363,7 @@ void app_main(void) {
     ESP_LOGI(TAG, " INIT I2C...");
     i2c_master_init();
     ESP_LOGI(TAG, "BEGAN MOVE DATA FROM 24C256 TO RAM");
-    
-    esp_err_t ret = kernal_read_all_to_ram();
+     esp_err_t ret = kernal_read_all_to_ram();
 
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "MOVE 8051 VIRTUAL RAM -ok");
@@ -378,7 +377,7 @@ void app_main(void) {
     DEFINE_CODE_ASM();
     BOOT_REAL_CPU_ENGINE(&REAL_CPU);
 
-    ESP_LOGI(TAG,"END------------------------>");
+    ESP_LOGI(TAG,"END---------->");
     while(1)
     {
         vTaskDelay(1000);
