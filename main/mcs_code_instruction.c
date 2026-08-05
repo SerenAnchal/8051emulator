@@ -123,14 +123,6 @@ void MCS_8051_INSTRUCTION_INC_DIRECT(MCS_8051 *cpu) {
     }
     if (opera_RAM_num > 127 && opera_RAM_num <= 255)
     {
-        if (opera_RAM_num == 130) //数据指针低字节
-        {
-            ESP_LOGI(TAG,"[WARN]Can't operate the DPL,%u",cpu->PC_R);
-        }
-        if (opera_RAM_num == 131) //数据指针高字节
-        {
-            ESP_LOGI(TAG,"[WARN]Can't operate the DPH,%u",cpu->PC_R);
-        }
         int opera_SFR_num = opera_RAM_num - 128;
         Kernel_8051_SFR[opera_SFR_num] = Kernel_8051_SFR[opera_SFR_num] & 0x01;
          ESP_LOGI(TAG, "INC_DIRECT,PC: 0x%04x, OPERA_RAM_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_RAM_addr,Kernel_8051_L_RAM[opera_RAM_num]);
@@ -429,14 +421,6 @@ void MCS_8051_INSTRUCTION_DEC_DIRECT(MCS_8051 *cpu) {
         ESP_LOGI(TAG, "DEC_DIRECT,PC: 0x%04x, OPERA_RAM_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_RAM_addr,Kernel_8051_L_RAM[opera_RAM_num]);
     } else if (opera_RAM_num > 127 && opera_RAM_num <= 255)
     {
-        if (opera_RAM_num == 130) //数据指针低字节
-        {
-            ESP_LOGI(TAG,"[WARN]Can't operate the DPL,%u",cpu->PC_R);
-        }
-        if (opera_RAM_num == 131) //数据指针高字节
-        {
-            ESP_LOGI(TAG,"[WARN]Can't operate the DPH,%u",cpu->PC_R);
-        }
         int opera_SFR_num = opera_RAM_num - 128;
         Kernel_8051_SFR[opera_SFR_num] = Kernel_8051_SFR[opera_SFR_num] & 0xFE;
          ESP_LOGI(TAG, "DEC_DIRECT,PC: 0x%04x, OPERA_RAM_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_RAM_addr,Kernel_8051_L_RAM[opera_RAM_num]);
@@ -720,10 +704,6 @@ void MCS_8051_INSTRUCTION_ADD_A_DIR(MCS_8051 *cpu) {
         }
     } else if (opera_RAM_num > 127 && opera_RAM_num <= 255)
     {
-        if (opera_RAM_num == 130 || opera_RAM_num == 131 ) //数据指针低/高字节
-        {
-            ESP_LOGI(TAG,"ADD_A_DIRECT[WARN]Can't operate the DPL/DPH,%u",cpu->PC_R);
-        }else{
         int opera_SFR_num = opera_RAM_num - 128;
         if (cpu->A_R + Kernel_8051_SFR[opera_SFR_num] > 255){
             cpu->A_R = (cpu->A_R + Kernel_8051_SFR[opera_SFR_num]) & 0xFF;
@@ -733,7 +713,7 @@ void MCS_8051_INSTRUCTION_ADD_A_DIR(MCS_8051 *cpu) {
             cpu->A_R = cpu->A_R + Kernel_8051_SFR[opera_SFR_num];
             ESP_LOGI(TAG, "ADD_A_DIRECT,PC: 0x%04x, OPERA_SFR_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_SFR_num,Kernel_8051_SFR[opera_SFR_num]);
         }
-    }
+    
    }
 }
 void MCS_8051_INSTRUCTION_ADD_AT_R0(MCS_8051 *cpu) { 
@@ -1087,7 +1067,7 @@ void MCS_8051_INSTRUCTION_ADDC_A_IMM(MCS_8051 *cpu) {
     temporary_num_2 = cpu->PSW_R & 0x80;
     if(temporary_num_2 > cpu->PSW_R){
         temporary_num_0 = cpu->A_R;
-        cpu->A_R = cpu->A_R + immediate_num;
+        cpu->A_R = (uint8_t)cpu->A_R + immediate_num;
         if(cpu->A_R < temporary_num_0){
             cpu->PSW_R = cpu->PSW_R & 0x7F;
             cpu->PSW_R = cpu->PSW_R | 0x80;
@@ -1133,10 +1113,6 @@ void MCS_8051_INSTRUCTION_ADDC_A_DIR(MCS_8051 *cpu) {
         }
     } else if (opera_RAM_num > 127 && opera_RAM_num <= 255)
     {
-        if (opera_RAM_num == 130 || opera_RAM_num == 131 ) //数据指针低/高字节
-        {
-            ESP_LOGI(TAG,"ADDC_A_DIRECT[WARN]Can't operate the DPL/DPH,%u",cpu->PC_R);
-        }else{
         int opera_SFR_num = opera_RAM_num - 128;
         if (cpu->A_R + Kernel_8051_SFR[opera_SFR_num] > 255){
             cpu->A_R = (cpu->A_R + Kernel_8051_SFR[opera_SFR_num]) & 0xFF;
@@ -1147,7 +1123,7 @@ void MCS_8051_INSTRUCTION_ADDC_A_DIR(MCS_8051 *cpu) {
             cpu->A_R = cpu->A_R + Kernel_8051_SFR[opera_SFR_num];
             ESP_LOGI(TAG, "ADDC_A_DIRECT,PC: 0x%04x, OPERA_SFR_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_SFR_num,Kernel_8051_SFR[opera_SFR_num]);
         }
-    }
+    
    }
     }else{//进位
          if(opera_RAM_num <= 127){
@@ -1163,10 +1139,7 @@ void MCS_8051_INSTRUCTION_ADDC_A_DIR(MCS_8051 *cpu) {
         }
     } else if (opera_RAM_num > 127 && opera_RAM_num <= 255)
     {
-        if (opera_RAM_num == 130 || opera_RAM_num == 131 ) //数据指针低/高字节
-        {
-            ESP_LOGI(TAG,"ADDC_A_DIRECT[WARN]Can't operate the DPL/DPH,%u",cpu->PC_R);
-        }else{
+        
         int opera_SFR_num = opera_RAM_num - 128;
         if (cpu->A_R + Kernel_8051_SFR[opera_SFR_num] + 1 > 255){
             temporary_num = cpu->A_R + Kernel_8051_SFR[opera_SFR_num];
@@ -1179,7 +1152,6 @@ void MCS_8051_INSTRUCTION_ADDC_A_DIR(MCS_8051 *cpu) {
             cpu->A_R = cpu->A_R + Kernel_8051_SFR[opera_SFR_num] + 1;
             ESP_LOGI(TAG, "ADDC_A_DIRECT,PC: 0x%04x, OPERA_SFR_ADDR: 0x%02x,OPERA_VALUE:0x%02x", cpu->PC_R,opera_SFR_num,Kernel_8051_SFR[opera_SFR_num]);
         }
-    }
    }
     }
     cpu->PC_R = cpu->PC_R + 2;
@@ -1665,7 +1637,7 @@ void MCS_8051_INSTRUCTION_ORL_DIR_A(MCS_8051 *cpu) {
     uint8_t opera_DIR_addr = Kernel_8051_ROM[cpu->PC_R + 1];
     uint8_t A_RG_value = cpu->A_R;
 
-    int opera_DIR_num = (int)A_RG_value;
+    int opera_DIR_num = (int)opera_DIR_addr;
     cpu->PC_R = cpu->PC_R + 2;
 
      if(opera_DIR_num <= 127){
@@ -1673,17 +1645,16 @@ void MCS_8051_INSTRUCTION_ORL_DIR_A(MCS_8051 *cpu) {
             ESP_LOGI(TAG, "ORL_DIR_A,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_DIR_addr,Kernel_8051_L_RAM[opera_DIR_num]);
     } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
     {
-        if (opera_DIR_num == 130 || opera_DIR_num == 131 ) //数据指针低/高字节
-        {
-            ESP_LOGI(TAG,"ORL_DIR_A[WARN]Can't operate the DPL/DPH,%u",cpu->PC_R);
-        }else{
         int opera_SFR_num = opera_DIR_num - 128;
             Kernel_8051_SFR[opera_SFR_num] = Kernel_8051_SFR[opera_SFR_num] | A_RG_value;
             ESP_LOGI(TAG, "ORL_DIR_A,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
-        }
     }
 }
 void MCS_8051_INSTRUCTION_ORL_DIR_IMM(MCS_8051 *cpu) { 
+        uint8_t opera_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+        uint8_t opera_imm_num = Kernel_8051_ROM[cpu->PC_R + 2];
+        cpu->PC_R = cpu->PC_R + 3;
+
 
 }
 void MCS_8051_INSTRUCTION_ORL_A_IMM(MCS_8051 *cpu) { }
