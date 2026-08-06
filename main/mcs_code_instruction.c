@@ -66,7 +66,7 @@ void BOOT_REAL_CPU_ENGINE(MCS_8051 *REAL_CPU){
         vTaskDelay(pdMS_TO_TICKS(10));
     }   
 }
-// 0x00 - 0x0F
+//0x00-0x0F
 void MCS_8051_INSTRUCTION_NOP(MCS_8051 *cpu) {
     cpu->PC_R = cpu->PC_R+1;
  }
@@ -308,7 +308,7 @@ void MCS_8051_INSTRUCTION_INC_R7(MCS_8051 *cpu) {
     ESP_LOGI(TAG, "INC_R7,PC: 0x%04x, OPERA_RSG_BANK,%n,R0_VALUE:0x%02x", cpu->PC_R,current_bank,cpu->REG_R_0);
  }
 
-// 0x10 - 0x1F 
+ //0x10-0x1F 
 void MCS_8051_INSTRUCTION_JBC(MCS_8051 *cpu) { 
     uint8_t addressing_addr = Kernel_8051_H_RAM[cpu->PC_R + 1];
     uint8_t offset = Kernel_8051_ROM[cpu->PC_R + 3];
@@ -607,7 +607,9 @@ void MCS_8051_INSTRUCTION_DEC_R7(MCS_8051 *cpu) {
     ESP_LOGI(TAG, "DEC_R7,PC: 0x%04x, OPERA_RSG_BANK,%n,R0_VALUE:0x%02x", cpu->PC_R,current_bank,cpu->REG_R_0);
  }
 
-// 0x20 - 0x2F
+
+
+ //0x20-0x2F
 void MCS_8051_INSTRUCTION_JB(MCS_8051 *cpu) { 
      uint8_t addressing_addr = Kernel_8051_H_RAM[cpu->PC_R + 1];
     uint8_t offset = Kernel_8051_ROM[cpu->PC_R + 3];
@@ -994,7 +996,7 @@ void MCS_8051_INSTRUCTION_ADD_R7(MCS_8051 *cpu) {
     }
  }
 
-// --- 0x30 - 0x3F ---
+//0x30-0x3F
 void MCS_8051_INSTRUCTION_JNB(MCS_8051 *cpu) { //JUMP IF NOT BIT SET
     uint8_t addressing_addr = Kernel_8051_H_RAM[cpu->PC_R + 1];
     uint8_t offset = Kernel_8051_ROM[cpu->PC_R + 3];
@@ -1620,7 +1622,7 @@ void MCS_8051_INSTRUCTION_ADDC_R7(MCS_8051 *cpu) {
      cpu->PC_R = cpu->PC_R + 1;
  }
 
-// --- 0x40 - 0x4F ---
+//0x40-0x4F
 void MCS_8051_INSTRUCTION_JC(MCS_8051 *cpu) { //JUMP IF CARRY 
     uint8_t jump_addr = Kernel_8051_ROM[cpu->PC_R + 1];
     uint8_t judg_bit = cpu->PSW_R & 0x80;
@@ -1655,58 +1657,678 @@ void MCS_8051_INSTRUCTION_ORL_DIR_IMM(MCS_8051 *cpu) {
         uint8_t opera_imm_num = Kernel_8051_ROM[cpu->PC_R + 2];
         cpu->PC_R = cpu->PC_R + 3;
 
+        int opera_DIR_num = (int)opera_addr;
+         if(opera_DIR_num <= 127){
+            Kernel_8051_L_RAM[opera_DIR_num] = Kernel_8051_L_RAM[opera_DIR_num] | opera_imm_num;
+            ESP_LOGI(TAG, "ORL_DIR_IMM,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_addr,Kernel_8051_L_RAM[opera_DIR_num]);
+    } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
+    {
+        int opera_SFR_num = opera_DIR_num - 128;
+            Kernel_8051_SFR[opera_SFR_num] = Kernel_8051_SFR[opera_SFR_num] | opera_imm_num;
+            ESP_LOGI(TAG, "ORL_DIR_IMM,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
+    }
+}
+void MCS_8051_INSTRUCTION_ORL_A_IMM(MCS_8051 *cpu) {
+    uint8_t imm_num = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
+
+    cpu->A_R = cpu->A_R | imm_num;
+    ESP_LOGI(TAG,"ORL_A_IMM,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_A_DIR(MCS_8051 *cpu) {
+    uint8_t dir_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
+
+    int opera_DIR_num = (int)dir_addr;
+    if(opera_DIR_num <= 127){
+        cpu->A_R = cpu->A_R | Kernel_8051_L_RAM[opera_DIR_num];
+         ESP_LOGI(TAG, "ORL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }else{
+        int opera_SFR_num = opera_DIR_num - 128;
+        cpu->A_R = cpu->A_R | Kernel_8051_SFR[opera_SFR_num];
+        ESP_LOGI(TAG, "ORL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }
+ }
+void MCS_8051_INSTRUCTION_ORL_A_AT_R0(MCS_8051 *cpu) {
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+    uint8_t opera_dir = 0;
+    cpu->PC_R = cpu->PC_R + 1;
+
+    if(current_bank == 0){
+        opera_dir = cpu->REG_R_0[0];
+    }else if(current_bank == 1){
+        opera_dir = cpu->REG_R_1[0];
+    }else if (current_bank ==2){
+        opera_dir = cpu->REG_R_2[0];
+    }else if (current_bank ==3){
+        opera_dir = cpu->REG_R_3[0];
+    }
+
+     if (opera_dir <= 0x7F) {
+        cpu->A_R = cpu->A_R | Kernel_8051_L_RAM[opera_dir];
+        ESP_LOGI(TAG,"ORL_A_AT_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    } 
+    else {
+        cpu->A_R = cpu->A_R | Kernel_8051_SFR[opera_dir - 0x80];
+         ESP_LOGI(TAG,"ORL_A_AT_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_ORL_A_AT_R1(MCS_8051 *cpu) { 
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+    uint8_t opera_dir = 0;
+    cpu->PC_R = cpu->PC_R + 1;
+
+    if(current_bank == 0){
+        opera_dir = cpu->REG_R_0[1];
+    }else if(current_bank == 1){
+        opera_dir = cpu->REG_R_1[1];
+    }else if (current_bank ==2){
+        opera_dir = cpu->REG_R_2[1];
+    }else if (current_bank ==3){
+        opera_dir = cpu->REG_R_3[1];
+    }
+
+     if (opera_dir <= 0x7F) {
+        cpu->A_R = cpu->A_R | Kernel_8051_L_RAM[opera_dir];
+        ESP_LOGI(TAG,"ORL_A_AT_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    } 
+    else {
+        cpu->A_R = cpu->A_R | Kernel_8051_SFR[opera_dir - 0x80];
+         ESP_LOGI(TAG,"ORL_A_AT_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    }
+}
+void MCS_8051_INSTRUCTION_ORL_R0(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[0];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[0];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[0];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[0];
+    }
+     ESP_LOGI(TAG,"ORL_A_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R1(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[1];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[1];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[1];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[1];
+    }
+     ESP_LOGI(TAG,"ORL_A_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R2(MCS_8051 *cpu) { 
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[2];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[2];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[2];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[2];
+    }
+     ESP_LOGI(TAG,"ORL_A_R2,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+}
+void MCS_8051_INSTRUCTION_ORL_R3(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[3];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[3];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[3];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[3];
+    }
+     ESP_LOGI(TAG,"ORL_A_R3,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R4(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[4];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[4];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[4];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[4];
+    }
+     ESP_LOGI(TAG,"ORL_A_R4,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R5(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[5];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[5];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[5];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[5];
+    }
+     ESP_LOGI(TAG,"ORL_A_R5,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R6(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[6];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[6];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[6];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[6];
+    }
+     ESP_LOGI(TAG,"ORL_A_R6,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ORL_R7(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = cpu->A_R | cpu->REG_R_0[7];
+    }else if(current_bank == 1){
+        cpu->A_R = cpu->A_R | cpu->REG_R_1[7];
+    }else if (current_bank ==2){
+        cpu->A_R = cpu->A_R | cpu->REG_R_2[7];
+    }else if (current_bank ==3){
+        cpu->A_R = cpu->A_R | cpu->REG_R_3[7];
+    }
+     ESP_LOGI(TAG,"ORL_A_R7,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+
+//0x50-0x5F
+void MCS_8051_INSTRUCTION_JNC(MCS_8051 *cpu) {//Jump if No Carry
+    int8_t jump_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    uint8_t judg_bit = cpu->PSW_R & 0x80;
+
+    if(judg_bit == 0){
+        cpu->PC_R = jump_addr;
+        ESP_LOGI(TAG, "JNC,CY=0,PC:0x%04x,FINAL_VALUE: 0x%02x", cpu->PC_R,cpu->A_R);
+    }else{
+        cpu->PC_R = cpu->PC_R + 2;
+        ESP_LOGI(TAG, "JNC,CY=1,PC:0x%04x,FINAL_VALUE: 0x%02x", cpu->PC_R,cpu->A_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_ANL_DIR_A(MCS_8051 *cpu) { 
+     uint8_t opera_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    uint8_t opera_imm_num = Kernel_8051_ROM[cpu->PC_R + 2];
+        cpu->PC_R = cpu->PC_R + 3;
+
+        int opera_DIR_num = (int)opera_addr;
+         if(opera_DIR_num <= 127){
+            Kernel_8051_L_RAM[opera_DIR_num] = (uint8_t)Kernel_8051_L_RAM[opera_DIR_num] & opera_imm_num;
+            ESP_LOGI(TAG, "ANL_DIR_IMM,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_addr,Kernel_8051_L_RAM[opera_DIR_num]);
+    } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
+    {
+        int opera_SFR_num = opera_DIR_num - 128;
+            Kernel_8051_SFR[opera_SFR_num] = (uint8_t)Kernel_8051_SFR[opera_SFR_num] & opera_imm_num;
+            ESP_LOGI(TAG, "ANL_DIR_IMM,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
+    }
 
 }
-void MCS_8051_INSTRUCTION_ORL_A_IMM(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_A_DIR(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_AT_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_AT_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R2(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R3(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R4(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R5(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R6(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_R7(MCS_8051 *cpu) { }
+void MCS_8051_INSTRUCTION_ANL_DIR_IMM(MCS_8051 *cpu) {
+      uint8_t opera_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+      uint8_t opera_imm_num = Kernel_8051_ROM[cpu->PC_R + 2];
+        cpu->PC_R = cpu->PC_R + 3;
 
-// --- 0x50 - 0x5F ---
-void MCS_8051_INSTRUCTION_JNC(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_DIR_A(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_DIR_IMM(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_A_IMM(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_A_DIR(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_AT_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_AT_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R2(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R3(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R4(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R5(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R6(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ANL_R7(MCS_8051 *cpu) { }
+        int opera_DIR_num = (int)opera_addr;
+         if(opera_DIR_num <= 127){
+            Kernel_8051_L_RAM[opera_DIR_num] = (uint8_t)Kernel_8051_L_RAM[opera_DIR_num] & opera_imm_num;
+            ESP_LOGI(TAG, "ANL_DIR_IMM,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_addr,Kernel_8051_L_RAM[opera_DIR_num]);
+    } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
+    {
+        int opera_SFR_num = opera_DIR_num - 128;
+            Kernel_8051_SFR[opera_SFR_num] = (uint8_t)Kernel_8051_SFR[opera_SFR_num] & opera_imm_num;
+            ESP_LOGI(TAG, "ANL_DIR_IMM,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
+    }
+ }
+void MCS_8051_INSTRUCTION_ANL_A_IMM(MCS_8051 *cpu) {
+    uint8_t imm_num = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
 
-// --- 0x60 - 0x6F ---
-void MCS_8051_INSTRUCTION_JZ(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_DIR_A(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_DIR_IMM(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_A_IMM(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_A_DIR(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_AT_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_AT_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R0(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R1(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R2(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R3(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R4(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R5(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R6(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_XRL_R7(MCS_8051 *cpu) { }
+    cpu->A_R = (uint8_t)cpu->A_R & imm_num;
+    ESP_LOGI(TAG,"ANL_A_IMM,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_A_DIR(MCS_8051 *cpu) { 
+    uint8_t dir_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
 
-// --- 0x70 - 0x7F ---
-void MCS_8051_INSTRUCTION_JNZ(MCS_8051 *cpu) { }
-void MCS_8051_INSTRUCTION_ORL_C_BIT(MCS_8051 *cpu) { }
+    int opera_DIR_num = (int)dir_addr;
+    if(opera_DIR_num <= 127){
+        cpu->A_R = (uint8_t)cpu->A_R & Kernel_8051_L_RAM[opera_DIR_num];
+         ESP_LOGI(TAG, "ANL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }else{
+        int opera_SFR_num = opera_DIR_num - 128;
+        cpu->A_R = (uint8_t)cpu->A_R & Kernel_8051_SFR[opera_SFR_num];
+        ESP_LOGI(TAG, "ANL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }
+}
+void MCS_8051_INSTRUCTION_ANL_AT_R0(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[0];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[0];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[0];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[0];
+    }
+     ESP_LOGI(TAG,"ANL_AT_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_AT_R1(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[1];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[1];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[1];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[1];
+    }
+     ESP_LOGI(TAG,"ANL_AT_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R0(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[0];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[0];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[0];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[0];
+    }
+     ESP_LOGI(TAG,"ANL_A_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R1(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[1];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[1];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[1];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[1];
+    }
+     ESP_LOGI(TAG,"ANL_A_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R2(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[2];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[2];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[2];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[2];
+    }
+     ESP_LOGI(TAG,"ANL_A_R2,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R3(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[3];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[3];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[3];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[3];
+    }
+     ESP_LOGI(TAG,"ANL_A_R3,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R4(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[4];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[4];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[4];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[4];
+    }
+     ESP_LOGI(TAG,"ANL_A_R4,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R5(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[5];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[5];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[5];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[5];
+    }
+     ESP_LOGI(TAG,"ANL_A_R5,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R6(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[6];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[6];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[6];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[6];
+    }
+     ESP_LOGI(TAG,"ANL_A_R6,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_ANL_R7(MCS_8051 *cpu) {
+     cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_0[7];
+    }else if(current_bank == 1){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_1[7];
+    }else if (current_bank ==2){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_2[7];
+    }else if (current_bank ==3){
+        cpu->A_R = (uint8_t)cpu->A_R & cpu->REG_R_3[7];
+    }
+     ESP_LOGI(TAG,"ANL_A_R7,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+
+//0x60-0x6F
+void MCS_8051_INSTRUCTION_JZ(MCS_8051 *cpu) {//Jump if Zero (A=0)
+    uint8_t jump_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    uint8_t judg_value = cpu->A_R;
+
+    if(judg_value == 0){
+        cpu->PC_R = jump_addr;
+        ESP_LOGI(TAG, "JZ,A=0,PC:0x%04x", cpu->PC_R);
+    }else{
+        cpu->PC_R = cpu->PC_R + 2;
+        ESP_LOGI(TAG, "JZ,A=1,PC:0x%04x", cpu->PC_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_XRL_DIR_A(MCS_8051 *cpu) {
+    uint8_t opera_DIR_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    uint8_t A_RG_value = cpu->A_R;
+
+    int opera_DIR_num = (int)opera_DIR_addr;
+    cpu->PC_R = cpu->PC_R + 2;
+
+     if(opera_DIR_num <= 127){
+            Kernel_8051_L_RAM[opera_DIR_num] = ~(Kernel_8051_L_RAM[opera_DIR_num] | A_RG_value);
+            ESP_LOGI(TAG, "XRL_DIR_A,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_DIR_addr,Kernel_8051_L_RAM[opera_DIR_num]);
+    } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
+    {
+        int opera_SFR_num = opera_DIR_num - 128;
+            Kernel_8051_SFR[opera_SFR_num] = ~(Kernel_8051_SFR[opera_SFR_num] | A_RG_value);
+            ESP_LOGI(TAG, "XRL_DIR_A,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
+    }
+ }
+void MCS_8051_INSTRUCTION_XRL_DIR_IMM(MCS_8051 *cpu) {
+        uint8_t opera_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+        uint8_t opera_imm_num = Kernel_8051_ROM[cpu->PC_R + 2];
+        cpu->PC_R = cpu->PC_R + 3;
+
+        int opera_DIR_num = (int)opera_addr;
+         if(opera_DIR_num <= 127){
+            Kernel_8051_L_RAM[opera_DIR_num] = ~(Kernel_8051_L_RAM[opera_DIR_num] | opera_imm_num);
+            ESP_LOGI(TAG, "XRL_DIR_IMM,PC: 0x%04x, OPER_RAM_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,opera_addr,Kernel_8051_L_RAM[opera_DIR_num]);
+    } else if (opera_DIR_num > 127 && opera_DIR_num <= 255)
+    {
+        int opera_SFR_num = opera_DIR_num - 128;
+            Kernel_8051_SFR[opera_SFR_num] = ~(Kernel_8051_SFR[opera_SFR_num] | opera_imm_num);
+            ESP_LOGI(TAG, "XRL_DIR_IMM,PC: 0x%04x, OPER_SFR_ADDR: 0x%02x,AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,(uint8_t)opera_DIR_num,Kernel_8051_SFR[opera_SFR_num]); 
+    }
+
+ }
+void MCS_8051_INSTRUCTION_XRL_A_IMM(MCS_8051 *cpu) {
+    uint8_t imm_num = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
+
+    cpu->A_R = ~(cpu->A_R | imm_num);
+    ESP_LOGI(TAG,"XRL_A_IMM,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+}
+void MCS_8051_INSTRUCTION_XRL_A_DIR(MCS_8051 *cpu) { 
+    uint8_t dir_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    cpu->PC_R = cpu->PC_R + 2;
+
+    int opera_DIR_num = (int)dir_addr;
+    if(opera_DIR_num <= 127){
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_L_RAM[opera_DIR_num]);
+         ESP_LOGI(TAG, "XRL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }else{
+        int opera_SFR_num = opera_DIR_num - 128;
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_SFR[opera_SFR_num]);
+        ESP_LOGI(TAG, "XRL_A_IMM,PC: 0x%04x, AFTER_OPERA_VALUE:0x%02x", cpu->PC_R,cpu->A_R); 
+    }
+}
+void MCS_8051_INSTRUCTION_XRL_AT_R0(MCS_8051 *cpu) {
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+    uint8_t opera_dir = 0;
+    cpu->PC_R = cpu->PC_R + 1;
+
+    if(current_bank == 0){
+        opera_dir = cpu->REG_R_0[0];
+    }else if(current_bank == 1){
+        opera_dir = cpu->REG_R_1[0];
+    }else if (current_bank ==2){
+        opera_dir = cpu->REG_R_2[0];
+    }else if (current_bank ==3){
+        opera_dir = cpu->REG_R_3[0];
+    }
+
+     if (opera_dir <= 0x7F) {
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_L_RAM[opera_dir]);
+        ESP_LOGI(TAG,"ORL_A_AT_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    } 
+    else {
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_SFR[opera_dir - 0x80]);
+         ESP_LOGI(TAG,"ORL_A_AT_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_XRL_AT_R1(MCS_8051 *cpu) {
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+    uint8_t opera_dir = 0;
+    cpu->PC_R = cpu->PC_R + 1;
+
+    if(current_bank == 0){
+        opera_dir = cpu->REG_R_0[1];
+    }else if(current_bank == 1){
+        opera_dir = cpu->REG_R_1[1];
+    }else if (current_bank ==2){
+        opera_dir = cpu->REG_R_2[1];
+    }else if (current_bank ==3){
+        opera_dir = cpu->REG_R_3[1];
+    }
+
+     if (opera_dir <= 0x7F) {
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_L_RAM[opera_dir]);
+        ESP_LOGI(TAG,"ORL_A_AT_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    } 
+    else {
+        cpu->A_R = ~(cpu->A_R | Kernel_8051_SFR[opera_dir - 0x80]);
+         ESP_LOGI(TAG,"ORL_A_AT_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_XRL_R0(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[0]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[0]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[0]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[0]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R0,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R1(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[1]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[1]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[1]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[1]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R1,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R2(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[2]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[2]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[2]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[2]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R2,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R3(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[3]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[3]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[3]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[3]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R3,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R4(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[4]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[4]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[4]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[4]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R4,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R5(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[5]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[5]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[5]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[5]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R5,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R6(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[6]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[6]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[6]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[6]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R6,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+void MCS_8051_INSTRUCTION_XRL_R7(MCS_8051 *cpu) {
+    cpu->PC_R = cpu->PC_R + 1;
+    uint8_t current_bank = (cpu->PSW_R >> 3) & 0x03;
+
+    if(current_bank == 0){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_0[7]);
+    }else if(current_bank == 1){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_1[7]);
+    }else if (current_bank ==2){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_2[7]);
+    }else if (current_bank ==3){
+        cpu->A_R = ~(cpu->A_R | cpu->REG_R_3[7]);
+    }
+     ESP_LOGI(TAG,"XRL_A_R7,PC: 0x%04x,AFTER_OPERA_VALUE:0x%02x",cpu->PC_R,cpu->A_R);
+ }
+
+//0x70-0x7F
+void MCS_8051_INSTRUCTION_JNZ(MCS_8051 *cpu) {////Jump if Not Zero (A=0)
+    uint8_t jump_addr = Kernel_8051_ROM[cpu->PC_R + 1];
+    uint8_t judg_value = cpu->A_R;
+
+    if(judg_value == 0){
+         cpu->PC_R = cpu->PC_R + 2;
+        ESP_LOGI(TAG, "JNZ,A=0,PC:0x%04x", cpu->PC_R);
+    }else{
+          cpu->PC_R = jump_addr;
+        ESP_LOGI(TAG, "JNZ,A=1,PC:0x%04x", cpu->PC_R);
+    }
+ }
+void MCS_8051_INSTRUCTION_ORL_C_BIT(MCS_8051 *cpu) {
+
+ }
 void MCS_8051_INSTRUCTION_JMP_DPTR(MCS_8051 *cpu) { }
 void MCS_8051_INSTRUCTION_MOV_A_IMM(MCS_8051 *cpu) { }
 void MCS_8051_INSTRUCTION_MOV_DIR_IMM(MCS_8051 *cpu) { }
