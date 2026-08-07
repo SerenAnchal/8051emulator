@@ -8,6 +8,7 @@ typedef struct {
     unsigned char REG_R_2[8];
     unsigned char REG_R_3[8];
     unsigned char A_R;
+    unsigned char B_R;
     unsigned char PSW_R;
     unsigned short PC_R;
     unsigned char SP_R;

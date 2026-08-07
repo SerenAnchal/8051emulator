@@ -1,0 +1,42 @@
+Command: ninja all
+[1/9] Performing build step for 'bootloader'
+[1/1] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build\bootloader && C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe C:/esp/v6.0.2/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/build/bootloader/bootloader.bin"
+Bootloader binary size 0x5240 bytes. 0x2dc0 bytes (36%) free.
+[2/9] No install step for 'bootloader'
+[3/9] Completed 'bootloader'
+[4/9] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/mcs_code_instruction.c.obj
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_ADD_A_DIR':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:696:9: warning: unused variable 'value_bufore' [-Wunused-variable]
+  696 |     int value_bufore = (int)cpu->A_R;
+      |         ^~~~~~~~~~~~
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_ADDC_A_DIR':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:1101:9: warning: unused variable 'value_bufore' [-Wunused-variable]
+ 1101 |     int value_bufore = (int)cpu->A_R;
+      |         ^~~~~~~~~~~~
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_ADDC_AT_R0':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:1176:14: warning: unused variable 'temporary_num_0' [-Wunused-variable]
+ 1176 |     uint16_t temporary_num_0 = 0;
+      |              ^~~~~~~~~~~~~~~
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_ADDC_AT_R1':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:1247:14: warning: unused variable 'temporary_num_0' [-Wunused-variable]
+ 1247 |     uint16_t temporary_num_0 = 0;
+      |              ^~~~~~~~~~~~~~~
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_ORL_C_BIT':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:2333:10: warning: variable 'cy_state_bool' set but not used [-Wunused-but-set-variable]
+ 2333 |     bool cy_state_bool = 0;
+      |          ^~~~~~~~~~~~~
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c: In function 'MCS_8051_INSTRUCTION_JMP_DPTR':
+C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/main/mcs_code_instruction.c:2377:13: warning: unused variable 'A_value' [-Wunused-variable]
+ 2377 |     uint8_t A_value = cpu->A_R;
+      |             ^~~~~~~
+[5/9] Linking C static library esp-idf\main\libmain.a
+[6/9] Generating esp-idf/esp_system/ld/sections.ld
+[7/9] Linking CXX executable 8051sier.elf
+[8/9] Generating binary image from built executable
+esptool v5.3.1
+Creating ESP32-S3 image...
+Merged 3 ELF sections.
+Successfully created ESP32-S3 image.
+Generated C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/build/8051sier.bin
+[9/9] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\31736\Desktop\PROJECT\espidf_8051sier\8051sier\build && C:\Espressif\tools\python\v6.0.2\venv\Scripts\python.exe C:/esp/v6.0.2/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/build/partition_table/partition-table.bin C:/Users/31736/Desktop/PROJECT/espidf_8051sier/8051sier/build/8051sier.bin"
+8051sier.bin binary size 0x370b0 bytes. Smallest app partition is 0x100000 bytes. 0xc8f50 bytes (78%) free.
